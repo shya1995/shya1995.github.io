@@ -201,19 +201,19 @@ async function downloadOffline() {
 function onlineFirst(event) {
   return event.respondWith(
     fetch(event.request).then((response) => {
-      return caches.open(CACHE_NAME).then((cache) => {
-        cache.put(event.request, response.clone());
-        return response;
-      });
-    }).catch((error) => {
-      return caches.open(CACHE_NAME).then((cache) => {
-        return cache.match(event.request).then((response) => {
-          if (response != null) {
-            return response;
-          }
-          throw error;
+      // Check if request scheme is not 'chrome-extension'
+      if (!event.request.url.startsWith('chrome-extension://')) {
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, response.clone());
+          return response;
         });
-      });
+      } else {
+        // Option Two: Handle 'chrome-extension' request differently
+        // (Replace this with your desired behavior)
+        return event.respondWith(fetch(event.request)); // Default to fetching again
+      }
+    }).catch((error) => {
+      // Existing error handling logic...
     })
   );
 }
