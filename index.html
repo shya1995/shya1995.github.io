@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Opening App...</title>
+  <script>
+    window.onload = function() {
+      // 1. The custom scheme you will set up in FlutterFlow
+      var appScheme = "shya1995app://"; 
+      
+      // 2. Your App Store Link (Update this when you have it)
+      var iosStoreLink = "https://apps.apple.com/";
+      
+      // 3. Your Play Store Link (Update this when you have it)
+      var androidStoreLink = "https://play.google.com/store/";
+
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      // Try to open the app directly via the custom scheme
+      window.location.href = appScheme + window.location.pathname + window.location.search;
+
+      // Fallback: If the app doesn't open after 2.5 seconds, send them to the store
+      setTimeout(function() {
+        if (/android/i.test(userAgent)) {
+            window.location.href = androidStoreLink;
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            window.location.href = iosStoreLink;
+        } else {
+            document.body.innerHTML = "<h2>Please open this link on a mobile device.</h2>";
+        }
+      }, 2500);
+    }
+  </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+  <h2>Redirecting you to the app...</h2>
+</body>
+</html>
